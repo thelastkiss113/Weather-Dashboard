@@ -4,13 +4,17 @@ import axios from 'axios';
 export const fetchWeather = createAsyncThunk(
     'weather/fetchWeather',
     async (city) => {
-        const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
-        const response = await axios.get(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
-        );
-        return response.data;
+      const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+      );
+      // Save search history to localStorage
+      const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+      const updatedHistory = [city, ...new Set(searchHistory)].slice(0, 5); // limit to 5
+      localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+      return response.data;
     }
-);
+  );
 
 const weatherSlice = createSlice({
     name: 'weather',
