@@ -4,7 +4,7 @@ import axios from 'axios';
 export const fetchWeather = createAsyncThunk(
     'weather/fetchWeather',
     async (city) => {
-        const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
+        const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
         const response = await axios.get(
             `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
         );
