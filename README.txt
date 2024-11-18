@@ -1,7 +1,7 @@
 # Cyberpunk Weather Dashboard
 
 ## 🚀 Live Demo
-[Live Site](https://your-netlify-site.netlify.app)
+[Live Site](https://cyberwave-weather-dashboard.netlify.app)
 
 ## 🔧 Technologies Used
 - **React** for UI
