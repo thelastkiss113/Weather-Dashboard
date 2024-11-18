@@ -3,17 +3,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSun, faCloud, faBolt, faSnowflake } from "@fortawesome/free-solid-svg-icons";
 import SoundCloudPlayer from "./components/SoundCloudPlayer"; 
 import "./App.css";
+import WeatherDisplay from "./components/WeatherDisplay";
+import SearchHistory from "./components/SearchHistory";
+import WeatherInfo from "./components/WeatherInfo";
 
 const App = () => {
+  // State variables
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
   const [history, setHistory] = useState(() => {
+    // Retrieve search history from localStorage
     const storedHistory = localStorage.getItem("searchHistory");
     return storedHistory ? JSON.parse(storedHistory) : [];
   });
 
+  // Fetches weather data for the given city
   const fetchWeather = async () => {
     try {
+      // Make API call to OpenWeatherMap
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=e7a8a5b0d8e2cd1bc20d1f4d0b15dd62`
       );
@@ -21,7 +28,8 @@ const App = () => {
       const data = await response.json();
       setWeather(data);
 
-      const updatedHistory = [...history, city];
+      // Update search history
+      const updatedHistory = [city, ...history].slice(0, 5); // Keep only the latest 5 cities
       setHistory(updatedHistory);
       localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
     } catch (error) {
@@ -29,12 +37,15 @@ const App = () => {
     }
   };
 
+  // Handles a click on the search history
   const handleHistoryClick = (city) => {
     setCity(city);
     fetchWeather();
   };
 
+  // Returns the icon for the given weather condition
   const getWeatherIcon = (condition) => {
+    // Cloud, sun, thunderstorm, snowflake, or default (cloud)
     if (condition.includes("cloud")) return faCloud;
     if (condition.includes("sun") || condition.includes("clear")) return faSun;
     if (condition.includes("thunder")) return faBolt;
